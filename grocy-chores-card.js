@@ -50,7 +50,8 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
       else if (dueInDays == 0)
         return this.translate("Today");
       else
-        return dueDate.substr(0, 10);
+        return "In " + dueInDays + " days";
+        //return dueDate.substr(0, 10);
     }
 
     translate(string) {
@@ -125,17 +126,16 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
                   html`
                   <div class="info flex">
                     <div>
-                      ${item._filtered_name != null ? item._filtered_name : item.name}
-                      <div class="secondary">
-                        ${this.translate("Due")}: <span class="${item.next_estimated_execution_time != null ? this.checkDueClass(item.dueInDays) : ""}">${item.next_estimated_execution_time != null ? this.formatDueDate(item.next_estimated_execution_time, item.dueInDays) : "-"}</span>
-                      </div>
-                      ${this.show_assigned == true && item.next_execution_assigned_user != null ? html
-                        `
+                      ${item._filtered_name != null ? item._filtered_name : item.name} 
+                        <span style="color: #666666">
+                         ${(this.item_type == 'chore' && this.show_assigned == true && item.next_execution_assigned_user != null) ? ("(" + item.next_execution_assigned_user.display_name + ")") : ""}
+                         ${(this.item_type == 'task' && this.show_assigned == true && item.assigned_to_user != null) ? ("(" + item.assigned_to_user.display_name + ")") : ""}
+                        </span>
+                      <div style="float: right">
                         <div class="secondary">
-                            ${this.translate("Assigned to")}: ${item.next_execution_assigned_user.display_name}
+                          <span class="${item.next_estimated_execution_time != null ? this.checkDueClass(item.dueInDays) : ""}">${item.next_estimated_execution_time != null ? this.formatDueDate(item.next_estimated_execution_time, item.dueInDays) : "-"}</span>
                         </div>
-                        `
-                      : ""}
+                      </div>
                       ${this.show_last_tracked == true ? html
                       `
                         ${item.type == "chore" ? html
@@ -253,6 +253,7 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
             .flex {
               display: flex;
               justify-content: space-between;
+              flex-direction: column;
             }
             .overdue {
               color: red !important;
@@ -265,9 +266,9 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
               margin-left: 16px;
               padding-bottom: 16px;
             }
-            .secondary {
-              display: block;
-              color: #8c96a5;
+            .secondary { 
+              display: inline;
+              color: #666666;
             }
             .add-row {
               margin-top: -16px;
@@ -290,6 +291,7 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
 
       _configSetup(){
         this.userId = this.config.user_id == null ? 1 : this.config.user_id;
+        this.item_type = this.config.item_type == null ? 'chore' : this.config.item_type;
         this.filter = this.config.filter == null ? null : this.config.filter;
         this.filter_user = this.config.filter_user == null ? null : this.config.filter_user;
         this.remove_filter = this.config.remove_filter == null ? false : this.config.remove_filter;
@@ -366,21 +368,11 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
       
               if (this.filter_user != null) {
                 var filteredItems = [];
-                
-                if (item.type = "chore") {
-                  for (let i = 0; i < items.length; i++) {
-                    if (items[i].next_execution_assigned_user != null && items[i].next_execution_assigned_user.id == this.filter_user) {
-                      filteredItems.push(items[i]);
-                    }
-                  }
-                } else {
-                  for (let i = 0; i < items.length; i++) {
-                    if (items[i].assigned_to_user_id != null && items[i].assigned_to_user_id == this.filter_user) {
-                      filteredItems.push(items[i]);
-                    }
+                for (let i = 0; i < items.length; i++) {
+                  if (items[i].next_execution_assigned_user != null && items[i].next_execution_assigned_user.id == this.filter_user) {
+                    filteredItems.push(items[i]);
                   }
                 }
-
                 items = filteredItems;
               }
 
