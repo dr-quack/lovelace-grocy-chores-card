@@ -133,7 +133,7 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
                         </span>
                       <div style="float: right">
                         <div class="secondary">
-                          <span class="${item.next_estimated_execution_time != null ? this.checkDueClass(item.dueInDays) : ""}">${item.next_estimated_execution_time != null ? this.formatDueDate(item.next_estimated_execution_time, item.dueInDays) : "-"}</span>
+                          <span class="${item.next_estimated_execution_time != null ? this.checkDueClass(item.dueInDays) : ""}">${item.next_estimated_execution_time != null && this.item_type == 'chore' ? this.formatDueDate(item.next_estimated_execution_time, item.dueInDays) : " "}</span>
                         </div>
                       </div>
                       ${this.show_last_tracked == true ? html
