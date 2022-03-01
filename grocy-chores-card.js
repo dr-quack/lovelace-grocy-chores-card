@@ -156,13 +156,13 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
                       ${item.type == "chore" ? html
                       `
                       <div>
-                        <mwc-button @click=${ev => this._trackChore(item.id)}>${this.translate("Track")}</mwc-button>
+                        <mwc-button @click=${ev => this._trackChore(item.id)}>${this.translate("Mark done")}</mwc-button>
                       </div>     
                       `
                       : html
                       `
                       <div>
-                        <mwc-button @click=${ev => this._trackTask(item.id)}>${this.translate("Track")}</mwc-button>
+                        <mwc-button @click=${ev => this._trackTask(item.id)}>${this.translate("Mark done")}</mwc-button>
                       </div>
                       `}
                     `
