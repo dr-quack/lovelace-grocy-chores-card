@@ -111,6 +111,12 @@ import { html, LitElement } from "https://unpkg.com/lit?module";
                     placeholder=${this.translate("Add task")}>
                   </paper-input>
                   <paper-input
+                    id="add-user"
+                    class="add-input"
+                    no-label-float
+                    placeholder=${this.translate("Assigned")}>
+                  </paper-input>
+                  <paper-input
                     id="add-date"
                     class="add-input"
                     no-label-float
